@@ -169,8 +169,8 @@ class Game(Widget):
 
         # 画面右上に簡単なデバッグ文字を出すラベル
         self.debug_label = Label(text="", halign="left", valign="top",
-                                 size_hint=(None, None), size=(400, 150),
-                                 pos=(16, HEIGHT - 150))
+                                    size_hint=(None, None), size=(400, 150),
+                                    pos=(16, HEIGHT - 150))
         self.add_widget(self.debug_label)
 
         # キーボード登録
@@ -188,7 +188,7 @@ class Game(Widget):
     def _on_keyboard_closed(self):
         if self._keyboard:
             self._keyboard.unbind(on_key_down=self._on_key_down,
-                                  on_key_up=self._on_key_up)
+                                    on_key_up=self._on_key_up)
             self._keyboard = None
 
     def _on_key_down(self, keyboard, keycode, text, modifiers):
