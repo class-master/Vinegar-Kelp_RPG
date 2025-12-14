@@ -41,6 +41,12 @@ class Chest:
         self.tile_y = tile_y
         self.item_id = item_id
         self.opened = False
+    def open(self):
+        if self.opened:
+            return "宝箱はすでに開いています"
+        self.opened = True
+        return f"宝箱をあけた。中には{self.item_id}が入っていた"
+
 
     def pos_px(self) -> Tuple[int, int]:
         return self.tile_x * TILE_SIZE, self.tile_y * TILE_SIZE
@@ -66,10 +72,22 @@ def is_adjacent_tile(px: int, py: int, cx: int, cy: int) -> bool:
 def inventory_to_lines(inventory: Dict[str, int]) -> List[str]:
     """所持品辞書を、UI表示用の文字列リストにする。"""
     lines: List[str] = []
+    
+    ITEMS = {
+        "potion": {"name": "ポーション", "heal": 20},
+        "hi_potion": {"name": "ハイポーション", "heal": 50}
+    }
     for item_id, count in sorted(inventory.items()):
         name = ITEMS.get(item_id, {}).get("name", item_id)
         lines.append(f"{name} x{count}")
     return lines
+
+    ITEMS = {
+        "potion": {"name": "ポーション", "heal": 20},
+        "hi_potion": {"name": "ハイポーション", "heal": 50}
+    }
+
+
 
 # ----------------------------------------------------------------------
 # Game本体
