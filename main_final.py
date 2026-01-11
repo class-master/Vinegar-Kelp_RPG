@@ -74,11 +74,12 @@ DEFAULT_CHESTS: List[Chest] = [
     Chest(14, 10, "hi_potion"),
     Chest(18, 12, "potion"),
     Chest(22, 14, "hi_potion"),
+    Chest(24, 11, "potion"),
 ]
 
 
 DEFAULT_ENEMIES: List[EnemySymbol] = [
-    EnemySymbol("スライム", 10, 6, max_hp=12, attack=3),
+    EnemySymbol("スライム", 10, 6, max_hp=20, attack=3),
     EnemySymbol("コウモリ", 14, 8, max_hp=8, attack=4),
     EnemySymbol("キノコ", 18, 11, max_hp=10, attack=3),
 ]
@@ -99,15 +100,18 @@ def inventory_to_lines(inventory: Dict[str, int]) -> List[str]:
 
 # ----------------------------------------------------------------------
 # ゲーム本体
-# ----------------------------------------------------------------------
-class Game(Widget):
-    # ログはPropertyにしておくとデバッグしやすい
+#opertyにしておくとデバッグしやすい
     battle_log = ListProperty([])
-    mode = StringProperty("field")  # "field" / "battle" / "clear" / "gameover"
 
+class Game(Widget):
+    mode = StringProperty("field")# ログはPreld")  # "field" / "battle" / "clear" / "gameover"
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         Window.size = (WIDTH, HEIGHT)
+
+        Window.bind(on_key_down = self._on_key_down)
+        Window.bind(on_key_up = self._on_key_up)
 
         # マップ読み込み
         self.grid, self.rows, self.cols = load_csv_as_tilemap(MAP_CSV)
@@ -161,18 +165,24 @@ class Game(Widget):
     # 入力
     # ----------------------------
     def _on_key_down(self, window, keycode, scancode, codepoint, modifiers):
-        key_id, s = keycode
+        if isinstance(keycode, tuple):
+            key_id, s = keycode
 
+        else:
+            key_id = keycode
+            s =str(keycode)
+
+        
         # どのmodeでも使うキー
-        if s == "i":
+        if s == "i":    
             self.inv_window.toggle()
             self._refresh_ui()
-            return True
-        if s == "u":
+            return True  
+        if s == "u":    #使う
             self._try_use_first_item()
             return True
-        if s == "e" and self.mode == "field":
-            self._try_open_chest()
+        if s == "e" and self.mode == "field":   #開ける
+            self._open_chest()
             return True
         if s == "r" and self.mode in ("clear", "gameover"):
             self._restart()
@@ -189,8 +199,15 @@ class Game(Widget):
             self.keys.add(s)
         return True
 
-    def _on_key_up(self, window, keycode):
-        key_id, s = keycode
+    def _on_key_up(self, window, keycode,*args):
+        if isinstance(keycode, tuple):
+                key_id, s = keycode
+
+        else:
+            key_id = keycode
+            s = str(keycode)
+
+
         if s in self.keys:
             self.keys.remove(s)
         return True
@@ -205,35 +222,35 @@ class Game(Widget):
         self._refresh_ui()
         self.draw()
 
+    
     def _update_field(self, dt):
-        # 速度（タイル座標でなくピクセルっぽく動かす必要がある場合はここを拡張）
-        # 今回は教材の簡便さ優先で「タイル移動」寄せにする
-        dx, dy = 0, 0
-        if "w" in self.keys or "up" in self.keys:
-            dy = 1
-        elif "s" in self.keys or "down" in self.keys:
-            dy = -1
-        elif "a" in self.keys or "left" in self.keys:
-            dx = -1
-        elif "d" in self.keys or "right" in self.keys:
-            dx = 1
+            # 速度（タイル座標でなくピクセルっぽく動かす必要がある場合はここを拡張）
+            # 今回は教材の簡便さ優先で「タイル移動」寄せにする
+            dx, dy = 0, 0
+            if "w" in self.keys or "up" in self.keys:
+                dy = 1
+            elif "s" in self.keys or "down" in self.keys:
+                dy = -1
+            elif "a" in self.keys or "left" in self.keys:
+                dx = -1
+            elif "d" in self.keys or "right" in self.keys:
+                dx = 1
 
-        if dx == 0 and dy == 0:
-            return
+            if dx == 0 and dy == 0:
+                return
 
-        nx, ny = self.px + dx, self.py + dy
-        if not self._tile_is_walkable(nx, ny):
-            return
-
-        self.px, self.py = nx, ny
+            nx, ny = self.px + dx, self.py + dy
+            if not self._tile_is_walkable(nx, ny):
+                return
+            self.px, self.py = nx, ny
 
         # 敵と接触 → バトル開始
-        for enemy in self.enemies:
-            if enemy.defeated:
-                continue
-            if enemy.tile_x == self.px and enemy.tile_y == self.py:
-                self._start_battle(enemy)
-                break
+            for enemy in self.enemies:
+                if enemy.defeated:
+                    continue
+                if enemy.tile_x == self.px and enemy.tile_y == self.py:
+                    self._start_battle(enemy)
+                    break
 
     # ----------------------------
     # 判定
