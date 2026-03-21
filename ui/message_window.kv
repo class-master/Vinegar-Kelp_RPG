@@ -1,0 +1,17 @@
+<MessageWindow>:
+    size_hint_y: 0.25
+    pos_hint: {'x': 0, 'y': 0}
+    orientation: 'vertical'
+    padding: 8
+    canvas.before:
+        Color:
+            rgba: 0, 0, 0, 0.7
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+    Label:
+        text: root.text
+        text_size: self.width - 16, None
+        halign: 'left'
+        valign: 'top'

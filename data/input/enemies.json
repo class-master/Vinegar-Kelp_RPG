@@ -1,0 +1,37 @@
+{
+  "slime": {
+    "name": "スライム",
+    "max_hp": 15,
+    "attack": 4,
+    "defense": 0,
+    "image": "assets/images/fantasy_game_character_slime.png"
+  },
+  "goblin": {
+    "name": "ゴブリン",
+    "max_hp": 25,
+    "attack": 6,
+    "defense": 1,
+    "image": "assets/images/fantasy_goblin.png"
+  },
+  "bat": {
+    "name": "コウモリ",
+    "max_hp": 18,
+    "attack": 5,
+    "defense": 0
+  },
+  "zoma": {
+    "name": "ゾーマ",
+    "max_hp": 999,
+    "attack": 99,
+    "defense": 9,
+    "image": "assets/images/zoma.png",
+    "bgm": "assets/sounds/HerosChallenge.mp3"
+  },
+  "knight": {
+    "name": "ならず者",
+    "max_hp": 35,
+    "attack": 8,
+    "defense": 2,
+    "image": "assets/images/stand1_front03_youngman.png"
+  }
+}

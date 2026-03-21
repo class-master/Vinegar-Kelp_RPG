@@ -1,0 +1,125 @@
+#:kivy 2.3.0
+
+<BattleWindow>:
+    orientation: "vertical"
+    padding: 8
+    spacing: 8
+
+    # 上：背景＋敵表示
+    FloatLayout:
+        id: battle_stage
+        size_hint_y: 0.68
+
+        canvas.before:
+            Rectangle:
+                source: "assets/images/battle_image.png"
+                pos: self.pos
+                size: self.size
+
+        # 敵画像（背景の上に重ねる）
+        Image:
+            source: root.enemy_image
+            size_hint: 0.38, 0.38
+            pos_hint: {"center_x": 0.50, "center_y": 0.40}
+            allow_stretch: True
+            keep_ratio: True
+
+        # 敵名
+        Label:
+            text: root.enemy_name
+            font_name: "GenShin"
+            font_size: "28sp"
+            color: 1, 1, 1, 1
+            pos_hint: {"center_x": 0.50, "center_y": 0.16}
+            size_hint: 0.30, 0.10
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+
+    # 下：ステータス＋コマンド
+    BoxLayout:
+        size_hint_y: 0.20
+        spacing: 8
+
+        # 左：味方ステータス
+        BoxLayout:
+            orientation: "vertical"
+            padding: 10
+
+            canvas.before:
+                Color:
+                    rgba: 0.05, 0.05, 0.12, 0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 1, 1, 1, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 1.2
+
+            Label:
+                text: root.player_name
+                font_name: "GenShin"
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+                color: 1, 1, 1, 1
+
+            Label:
+                text: root.player_hp
+                font_name: "GenShin"
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+                color: 1, 1, 1, 1
+
+        # 右：コマンド枠
+        BoxLayout:
+            orientation: "vertical"
+            padding: 10
+
+            canvas.before:
+                Color:
+                    rgba: 0.05, 0.05, 0.12, 0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 1, 1, 1, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 1.2
+
+            Label:
+                text: root.command_text
+                font_name: "GenShin"
+                halign: "left"
+                valign: "top"
+                text_size: self.size
+                color: 1, 1, 1, 1
+
+    # 最下段：メッセージ
+    BoxLayout:
+        size_hint_y: 0.12
+        padding: 10
+
+        canvas.before:
+            Color:
+                rgba: 0.05, 0.05, 0.12, 0.98
+            Rectangle:
+                pos: self.pos
+                size: self.size
+            Color:
+                rgba: 1, 1, 1, 1
+            Line:
+                rectangle: self.x, self.y, self.width, self.height
+                width: 1.2
+
+        Label:
+            text: root.message
+            font_name: "GenShin"
+            halign: "left"
+            valign: "middle"
+            text_size: self.width - 16, None
+            color: 1, 1, 1, 1
