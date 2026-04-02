@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+from __future__ import annotations
+
+from pathlib import Path
+import csv
+
+from kivymd.uix.screen import MDScreen
+from ui.widgets.map_widget import MapWidget
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+def load_collision_csv(path: Path) -> list[list[int]] | None:
+    try:
+        if not path.exists():
+            print(f"[WARN] collision csv not found: {path}")
+            return None
+
+        with path.open("r", encoding="utf-8", newline="") as f:
+            rows = [[int(v) for v in row] for row in csv.reader(f) if row]
+
+        if not rows:
+            print(f"[WARN] collision csv is empty: {path}")
+            return None
+
+        w = len(rows[0])
+        if any(len(r) != w for r in rows):
+            print(f"[WARN] collision csv has ragged rows: {path}")
+            return None
+
+        print(f"[CSV LOAD] path={path}")
+        print(f"[CSV TOP] row1 col1={rows[0][0]}")
+        print(f"[CSV BOTTOM] row{len(rows)} col1={rows[-1][0]}")
+        return rows
+    except Exception as e:
+        print(f"[WARN] collision csv load failed: {path} ({e})")
+        return None
+
+
+class FieldScreen(MDScreen):
+    def on_pre_enter(self, *args):
+        view_path = BASE_DIR / "assets" / "maps" / "field_view.png"
+        col_path = BASE_DIR / "assets" / "maps" / "field_collision.csv"
+
+        collision = load_collision_csv(col_path)
+
+        self.clear_widgets()
+        self.add_widget(
+            MapWidget(
+                view_path=view_path,
+                collision=collision,
+                start_cell=(0, 4),
+            )
+        )

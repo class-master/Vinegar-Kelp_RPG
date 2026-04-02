@@ -5,10 +5,10 @@
     padding: 8
     spacing: 8
 
-    # 上：背景＋敵表示
+    # 上：背景＋敵＋味方画像
     FloatLayout:
         id: battle_stage
-        size_hint_y: 0.68
+        size_hint_y: 0.70
 
         canvas.before:
             Rectangle:
@@ -16,11 +16,11 @@
                 pos: self.pos
                 size: self.size
 
-        # 敵画像（背景の上に重ねる）
+        # 敵画像
         Image:
             source: root.enemy_image
-            size_hint: 0.38, 0.38
-            pos_hint: {"center_x": 0.50, "center_y": 0.40}
+            size_hint: 0.32, 0.32
+            pos_hint: {"center_x": 0.30, "center_y": 0.52}
             allow_stretch: True
             keep_ratio: True
 
@@ -28,60 +28,50 @@
         Label:
             text: root.enemy_name
             font_name: "GenShin"
-            font_size: "28sp"
+            font_size: "24sp"
             color: 1, 1, 1, 1
-            pos_hint: {"center_x": 0.50, "center_y": 0.16}
-            size_hint: 0.30, 0.10
+            size_hint: 0.28, 0.10
+            pos_hint: {"center_x": 0.30, "center_y": 0.24}
             halign: "center"
             valign: "middle"
             text_size: self.size
 
-    # 下：ステータス＋コマンド
+        # 勇者画像（敵と同サイズ）
+        Image:
+            id: hero_image
+            source: "assets/images/yuusya_game.png"
+            size_hint: 0.32, 0.32
+            pos_hint: {"center_x": 0.78, "center_y": 0.52}
+            allow_stretch: True
+            keep_ratio: True
+
+        # 勇者名
+        Label:
+            text: root.player_name
+            font_name: "GenShin"
+            font_size: "24sp"
+            color: 1, 1, 1, 1
+            size_hint: 0.28, 0.10
+            pos_hint: {"center_x": 0.78, "center_y": 0.24}
+            halign: "center"
+            valign: "middle"
+            text_size: self.size
+
+    # 下：コマンド＋メッセージ＋HP枠
     BoxLayout:
-        size_hint_y: 0.20
+        orientation: "horizontal"
+        size_hint_y: 0.30
         spacing: 8
 
-        # 左：味方ステータス
+        # 左：コマンド
         BoxLayout:
             orientation: "vertical"
+            size_hint_x: 0.28
             padding: 10
 
             canvas.before:
                 Color:
-                    rgba: 0.05, 0.05, 0.12, 0.95
-                Rectangle:
-                    pos: self.pos
-                    size: self.size
-                Color:
-                    rgba: 1, 1, 1, 1
-                Line:
-                    rectangle: self.x, self.y, self.width, self.height
-                    width: 1.2
-
-            Label:
-                text: root.player_name
-                font_name: "GenShin"
-                halign: "left"
-                valign: "middle"
-                text_size: self.size
-                color: 1, 1, 1, 1
-
-            Label:
-                text: root.player_hp
-                font_name: "GenShin"
-                halign: "left"
-                valign: "middle"
-                text_size: self.size
-                color: 1, 1, 1, 1
-
-        # 右：コマンド枠
-        BoxLayout:
-            orientation: "vertical"
-            padding: 10
-
-            canvas.before:
-                Color:
-                    rgba: 0.05, 0.05, 0.12, 0.95
+                    rgba: 0.10, 0.08, 0.35, 0.95
                 Rectangle:
                     pos: self.pos
                     size: self.size
@@ -94,32 +84,72 @@
             Label:
                 text: root.command_text
                 font_name: "GenShin"
+                font_size: "22sp"
+                color: 1, 1, 1, 1
                 halign: "left"
                 valign: "top"
                 text_size: self.size
+
+        # 中央：メッセージ
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_x: 0.44
+            padding: 10
+
+            canvas.before:
+                Color:
+                    rgba: 0.10, 0.08, 0.35, 0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 1, 1, 1, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 1.2
+
+            Label:
+                text: root.message
+                font_name: "GenShin"
+                font_size: "22sp"
                 color: 1, 1, 1, 1
+                halign: "left"
+                valign: "top"
+                text_size: self.width - 16, self.height - 16
 
-    # 最下段：メッセージ
-    BoxLayout:
-        size_hint_y: 0.12
-        padding: 10
+        # 右：HP枠
+        BoxLayout:
+            orientation: "vertical"
+            size_hint_x: 0.28
+            padding: 10
+            spacing: 4
 
-        canvas.before:
-            Color:
-                rgba: 0.05, 0.05, 0.12, 0.98
-            Rectangle:
-                pos: self.pos
-                size: self.size
-            Color:
-                rgba: 1, 1, 1, 1
-            Line:
-                rectangle: self.x, self.y, self.width, self.height
-                width: 1.2
+            canvas.before:
+                Color:
+                    rgba: 0.10, 0.08, 0.35, 0.95
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                Color:
+                    rgba: 1, 1, 1, 1
+                Line:
+                    rectangle: self.x, self.y, self.width, self.height
+                    width: 1.2
 
-        Label:
-            text: root.message
-            font_name: "GenShin"
-            halign: "left"
-            valign: "middle"
-            text_size: self.width - 16, None
-            color: 1, 1, 1, 1
+            Label:
+                text: root.player_name
+                font_name: "GenShin"
+                font_size: "20sp"
+                color: 1, 1, 1, 1
+                halign: "left"
+                valign: "middle"
+                text_size: self.size
+
+            Label:
+                text: root.player_hp
+                font_name: "GenShin"
+                font_size: "18sp"
+                color: 1, 1, 1, 1
+                halign: "left"
+                valign: "middle"
+                text_size: self.size

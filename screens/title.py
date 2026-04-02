@@ -14,7 +14,7 @@ class TitleScreen(MDScreen):
         # ★ヒント: 画面が入る直前に UI を作ると、戻ってきた時も毎回綺麗に描き直せる。
         self.clear_widgets()
         layout = MDBoxLayout(orientation="vertical", spacing="16dp", padding="24dp")
-        layout.add_widget(MDLabel(text="RPG Rustic - MasterB", halign="center", font_style="H4"))
+        layout.add_widget(MDLabel(text="Vinegar-Kelp_RPG", halign="center", font_style="H4"))
         layout.add_widget(MDLabel(text="Title Screen", halign="center"))
         # ★ヒント: ボタンの on_release で self.go_town を呼ぶ → manager.current を書き換える。
         layout.add_widget(MDRectangleFlatButton(text="Start (Go Town)", pos_hint={"center_x": 0.5}, on_release=self.go_town))

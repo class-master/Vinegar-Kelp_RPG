@@ -159,12 +159,14 @@ class BattleWindow(BoxLayout):
         self.mode = "resolving"
         self.message = "たたかう！"
 
+        self.animate_hero_attack()
+
         # ここで初めて1ターン処理
         self._controller.take_turn()
 
         # ログを時間差で流す
         self._event = Clock.schedule_interval(self._consume_log, 0.8)
-
+        
     def _do_escape(self):
         self.mode = "finished"
         self.command_text = ""
@@ -312,3 +314,16 @@ class BattleWindow(BoxLayout):
         anim = Animation(y=label.y + dp(40), opacity=0, duration=0.8)
         anim.bind(on_complete=lambda *x: stage.remove_widget(label))
         anim.start(label)
+        
+        
+    def animate_hero_attack(self):
+        hero = self.ids.hero_image
+
+        original_cx = hero.pos_hint.get("center_x", 0.78)
+        forward_cx = original_cx - 0.12   # 左へ前進（敵が左側なので）
+
+        anim = (
+            Animation(pos_hint={"center_x": forward_cx, "center_y": 0.52}, duration=0.12) +
+            Animation(pos_hint={"center_x": original_cx, "center_y": 0.52}, duration=0.12)
+        )
+        anim.start(hero)
